@@ -112,7 +112,7 @@ technically not a classifier since it returns probabilities instead of a predict
 
 Since logistic regression is used for binary classification, it is easy to see that:
 ![p22](image-2.png)
-$$\begin{align*}
+$$ \begin{align*}
 P[y = 1] &= \frac{1}{1+e^{-\vec{w}\cdot\vec{x}}} \\&= \frac{e^{\vec{w}\cdot\vec{x}}}{e^{\vec{w}\cdot\vec{x}}+1} \\&= \frac{e^{\vec{w}\cdot\vec{x}}}{e^{\vec{w}\cdot\vec{x}}+e^{\vec{0}\cdot\vec{x}}}
 \end{align*} $$
 
@@ -216,5 +216,6 @@ This means that each entry is reduced by the largest entry in the matrix.
 (2) Why might this be an optimization over using W_X? Justify your answer.
 
 ### Qsr4 (10%)
+
 
 Use the learningCurve function in runClassifier.py to plot the accuracy of the classifier as a function of the number of examples seen. Include the plot in your write-up. Do you observe any overfitting or underfitting? Discuss and expain what you observe.
