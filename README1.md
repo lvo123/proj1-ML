@@ -94,64 +94,10 @@ Now, let's plot the top 50 eigenvectors:
 ### Qpca3 (5%): Do these look like digits? Should they? Why or why not? (Include the plot in your write-up.) (Make sure you have got rid of the imaginary part in pca.)
 
 ## Part II    Softmax Regression [45%] 
-Files to edit/turn in for this part 
-```bash
-softmax.py     
-writeup.pdf
-```
-
-The goal of this part of the project is to implement Softmax Regression in order to classify the MNIST digit dataset. Softmax Regression is essentially a two-layer neural network where the output layer applies the Softmax cost function, a multiclass generalization of the logistic cost function.
-In logistic regression, we have a hypothesis function of the form
-
-$$ P[y = 1] = \frac{1}{1+e^{-\vec{w}\cdot\vec{x}}} $$
-
-![p2](image-1.png)
-
-where $$\vec{w}$$  is our weight vector. Like the hyperbolic tangent function, the logistic function is also a sigmoid function with the characteristic 's'-like shape, though it has a range of (0, 1) instead of (-1, 1). Note that this is
-technically not a classifier since it returns probabilities instead of a predicted class, but it's easy to turn it into a classifier by simply choosing the class with the highest probability.
-
-Since logistic regression is used for binary classification, it is easy to see that:
-![p22](image-2.png)
-
-$$ \begin{align*}
-P[y = 1] &= \frac{1}{1+e^{-\vec{w}\cdot\vec{x}}} \\&= \frac{e^{\vec{w}\cdot\vec{x}}}{e^{\vec{w}\cdot\vec{x}}+1} \\&= \frac{e^{\vec{w}\cdot\vec{x}}}{e^{\vec{w}\cdot\vec{x}}+e^{\vec{0}\cdot\vec{x}}}
-\end{align*} $$
-
-Similarly,
-![p23](image-3.png)
-
-$$\begin{align*}
-P[y = 0] &= 1 - \frac{1}{1+e^{-\vec{w}\cdot\vec{x}}} \\
-&= \frac{e^{\vec{w}\cdot\vec{x}}+1}{e^{\vec{w}\cdot\vec{x}}+1} - \frac{e^{\vec{w}\cdot\vec{x}}}{e^{\vec{w}\cdot\vec{x}}+1} \\
-&= \frac{e^{\vec{0}\cdot\vec{x}}}{e^{\vec{w}\cdot\vec{x}}+e^{\vec{0}\cdot\vec{x}}}
-\end{align*}$$
-
-From this form it appears that we can assign the vector $$\vec{w_1} = \vec{w}$$ as the weight vector for class 1 and $$\vec{w_0} = \vec{0}$$ as the weight vector for class 0. Our probability formulas are now unified into one equation:
-![p24](image-4.png)
-$$P[y = i] = \frac{e^{\vec{w_i}\cdot\vec{x}}}{\sum_{j}e^{\vec{w_j}\cdot\vec{x}}} $$
-
-
-This immediately motivates generalization to classification with more than 2 classes. By assigning a separate weight vector $$\vec{w_i}$$ to each class, for each example $$\vec{x}$$ we can predict the probability that it is class i, and again we can classify by choosing the most probable class. A more compact way of representing the values $$\vec{w_i}\cdot\vec{x}$$ is $$W \vec{x}$$ where each row i of W is $$\vec{w_i}$$. We can also represent a dataset $$\vec{x_i}$$  with a matrix `X` where each column is a single example.
-
-### Qsr1 (10%)
-(1) Show that the probabilities sum to 1. 
-(2) What are the dimensions of `W`? `X`? `WX`? 
-We can also train on this model with an appropriate loss function. The Softmax loss function is given by
-
-$$ L(W) = -\left[ \sum_{i=1}^{m} \sum_{k=1}^{K} 1\left\{y_i = k\right\} \log \frac{e^{\vec{w_k}\cdot \vec{x_i}}}{\sum_{j=1}^K e^{\vec{w_j}\cdot \vec{x_i}}}\right] $$
-
-![p25](image-5.png)
-where `m`is the number of examples, `k`is the number of classes, and $$ 1\left\{y_i = k\right\}$$ is an indicator variable that equals 1 when the statement inside the brackets is true, and 0 otherwise. The gradient (which you will not derive) is given by:
-![p26](image-6.png)
-
-$$\nabla_{\vec{w_k}} L(W) = -\sum_{i=1}^{m}{ \left[ \vec{x_i} \left( 1\{y_i = k\} - P[y_i = k]\right) \right]}$$
-
-Note that the indicator and the probabilities can be represented as matrices, which makes the code for the loss and the gradient very simple. ([See here](http://ufldl.stanford.edu/tutorial/supervised/SoftmaxRegression/) for more details)
-
-softmax.py contains a mostly-complete implementation of Softmax Regression. A code stub also has been provided in run_softmax.py. Once you correctly implement the incomplete portions of softmax.py, you will be able to run run_softmax.py in order to classify the MNIST digits.
-
-### Qsr2 (15%)
-
+![1](image-7.png)
+### Qsr1(10%)
+![2](image-8.png)
+### Qrs2()
 (1) Complete the implementation of the cost function.
 (2) Complete the implementation of the predict function.
 
@@ -159,7 +105,6 @@ Check your implementation by running:
 ```bash
 >>> python run_softmax.py
 ```
-
 The output should be:
 ```bash
 RUNNING THE L-BFGS-B CODE
@@ -221,8 +166,75 @@ This means that each entry is reduced by the largest entry in the matrix.
 
 ### Qsr4 (10%)
 
-
 Use the learningCurve function in runClassifier.py to plot the accuracy of the classifier as a function of the number of examples seen. Include the plot in your write-up. Do you observe any overfitting or underfitting? Discuss and expain what you observe.
 
+## Part III NN [25% and Extra 15%]
+Files to edit/turn in.
+```bash
+nn.py     
+writeup.pdf
+files created for the Q2 extra credits
+```
+In this part of the project, we'll implement a fully-connected neural network in general for the MNIST dataset. For `Qnn1`  you will complete nn.py. For `Qnn2`, create your own files.
+
+A code stub also has been provided in run_nn.py. Once you correctly implement the incomplete portions of nn.py, you will be able to run run_nn.py in order to classify the MNIST digits.
+
+The dataset is included under ./data. You will be using the following helper functions in "utils.py". In the following description, let `K, N, d` denote the number of classes, number of samples and number of features. 
+
+Selected functions in "utils.py"
+```bash
+loadMNIST(image_file, label_file) #returns data matrix X with shape (d, N) and labels with shape (N,)
+onehot(labels) # encodes labels into one hot style with shape (K,N)
+acc(pred_label, Y) # calculate the accuracy of prediction given ground truth Y, where pred_label is with shape (N,), Y is with shape (N,K).
+data_loader(X, Y=None, batch_size=64, shuffle=False) # Iterator that yield X,Y with shape(d, batch_size) and (K, batch_size).
+```
+### Qnn1 (20% for Qnn1.1, 1.2, 1.3 and 5% for Qnn 1.4) Implement the NN
+
+The scaffold has been built for you. Initialize the model and print the architecture with the following:
+```bash
+ >>> from nn import NN, Relu, Linear, SquaredLoss
+ >>> from utils import data_loader, acc, save_plot, loadMNIST, onehot
+ >>> model = NN(Relu(), SquaredLoss(), hidden_layers=[128,128])
+ >>> model.print_model()
+ ```
+Two activation functions (Relu, Linear) and self.predict(X) have been implemented for you.
+#### Qnn1.1
+![p31](image-9.png)
+#### Qnn1.2: Compute the gradients (TODO 2 & TODO 3)
+Implement the forward pass (TODO 2) and back propagation (TODO 3) for gradient calculation. Use "activation.activate" and "activation.backprop_grad" in your code so that your gradient computation works for different choices of activation functions.
+Do the following to see if the loss goes down.
+
+```bash
+>>> x_train, label_train = loadMNIST('data/train-images.idx3-ubyte', 'data/train-labels.idx1-ubyte')
+>>> x_test, label_test = loadMNIST('data/t10k-images.idx3-ubyte', 'data/t10k-labels.idx1-ubyte')
+>>> y_train = onehot(label_train)
+>>> y_test = onehot(label_test) 
+
+>>> model = NN(Relu(), SquaredLoss(), hidden_layers=[128, 128], input_d=784, output_d=10)
+>>> model.print_model()
+>>> training_data, dev_data = {"X":x_train, "Y":y_train}, {"X":x_test, "Y":y_test}
+>>> from run_nn import train_1pass
+>>> model, plot_dict = train_1pass(model, training_data, dev_data, learning_rate=1e-2, batch_size=64)
+```
+
+#### Qnn1.3 Run in epochs
+
+An epoch is a full pass of the training data. Run run_nn.py. 
+```bash 
+>>> python3 run_nn.py
+```
+Report your final accuracy on the dev set. You can either use the default setting or tune the architecture (number of layers, size of layers and loss function) and hyperparameters (lr, batch_size, max_epoch).
+
+#### Qnn1.4 (No implementation needed for this question). When initializing the weight matrix, in some cases it may be appropriate to initialize the entries as small random numbers rather than all zeros.  Give one reason why this may be a good idea.
+
+### Qnn2:
+Choose one of the following directions (outside research may be required) for further exploration (Feel free to copy nn.py, utils.py and run_nn.py as a starting point. Make sure that your code for Qnn2 is separated from your code for Qnn1):
 
 
+(1) Do dimension reduction with PCA. Try with different dimensions. Can you observe the trade-off in time and acc? Plot training time v.s. dimension, testing time v.s dimension and acc v.s. dimension. Visualize the principal components. 
+
+(2) Improve your results with ensemble methods. Describe your implementation. Can you observe improved performance compared with that of Q4? Why? (http://ciml.info/dl/v0_99/ciml-v0_99-ch13.pdf)
+
+(3) Implement a new optimizer (By implementing a different self.update for the NN class). Compare with the original SGD optimizer. You can read about the optimizers in (http://ruder.io/deep-learning-optimization-2017/). Does this new method take less number of samples to converge? Does this new method take less time to converge?
+
+Qnn2.1 Explain what you did and what you found. Comment the code so that it is easy to follow. Support your results with plots and numbers. Provide the implementation so we can replicate your results.
