@@ -138,7 +138,7 @@ This immediately motivates generalization to classification with more than 2 cla
 (2) What are the dimensions of `W`? `X`? `WX`? 
 We can also train on this model with an appropriate loss function. The Softmax loss function is given by
 
-$$L(W) = -\left[ \sum_{i=1}^{m} \sum_{k=1}^{K} 1\left\{y_i = k\right\} \log \frac{e^{\vec{w_k}\cdot \vec{x_i}}}{\sum_{j=1}^K e^{\vec{w_j}\cdot \vec{x_i}}}\right]$$
+$$ L(W) = -\left[ \sum_{i=1}^{m} \sum_{k=1}^{K} 1\left\{y_i = k\right\} \log \frac{e^{\vec{w_k}\cdot \vec{x_i}}}{\sum_{j=1}^K e^{\vec{w_j}\cdot \vec{x_i}}}\right] $$
 
 ![p25](image-5.png)
 where `m`is the number of examples, `k`is the number of classes, and $$ 1\left\{y_i = k\right\}$$ is an indicator variable that equals 1 when the statement inside the brackets is true, and 0 otherwise. The gradient (which you will not derive) is given by:
@@ -223,5 +223,6 @@ This means that each entry is reduced by the largest entry in the matrix.
 
 
 Use the learningCurve function in runClassifier.py to plot the accuracy of the classifier as a function of the number of examples seen. Include the plot in your write-up. Do you observe any overfitting or underfitting? Discuss and expain what you observe.
+
 
 
